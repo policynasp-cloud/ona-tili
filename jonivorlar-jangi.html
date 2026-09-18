@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jonivorlar jangi · O‘zbek tili 5</title>
+<style>
+:root{--bg:#14213D;--panel:#1E2D55;--panel2:#26386A;--ink:#F4F6FF;--muted:#A9B4D6;
+ --olov:#F26B3A;--suv:#3FA7E8;--ot:#5DC26B;--muz:#8FD8F0;--tosh:#C49A5E;--shamol:#C48BF0;
+ --gold:#F5B82E;--red:#E5484D;--green:#3ECF7A;--r:16px}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"Avenir Next","Segoe UI",Roboto,Arial,sans-serif;font-size:17px;line-height:1.45;-webkit-text-size-adjust:100%}
+button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
+button:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.app{max-width:620px;margin:0 auto;min-height:100vh;padding:0 14px 30px}
+header{display:flex;align-items:center;gap:10px;padding:14px 0 6px}
+header h1{font-size:1.1rem;margin:0;font-weight:900;letter-spacing:.3px}
+header .sub{font-size:.82rem;color:var(--muted)}
+.back{color:var(--gold);font-weight:800;padding:6px 10px 6px 2px}
+h2{font-size:1.45rem;margin:12px 0 6px;font-weight:900;line-height:1.2}
+p{margin:0 0 10px}.muted{color:var(--muted)}
+.card{background:var(--panel);border-radius:var(--r);padding:14px 16px;margin:10px 0}
+.btn{display:inline-block;padding:12px 18px;border-radius:12px;font-weight:900;background:var(--gold);color:#1a1a1a}
+.btn.sec{background:var(--panel2);color:var(--ink)}
+.btn[disabled]{opacity:.4;cursor:default}
+.btn.wide{width:100%;text-align:center;margin-top:8px}
+/* dex */
+.dex{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.mon{background:var(--panel);border-radius:14px;padding:8px 6px 10px;text-align:center;border:3px solid transparent;position:relative}
+.mon.sel{border-color:var(--gold)}
+.mon.sel::after{content:attr(data-slot);position:absolute;top:-8px;right:-8px;background:var(--gold);color:#1a1a1a;font-weight:900;width:24px;height:24px;border-radius:50%;line-height:24px;font-size:.85rem}
+.mon svg{width:100%;height:auto;max-height:84px}
+.mon .nm{font-weight:900;font-size:.9rem;margin-top:4px}
+.mon .tp{font-size:.72rem;font-weight:800;padding:1px 8px;border-radius:999px;color:#111;display:inline-block}
+.tp.olov{background:var(--olov)}.tp.suv{background:var(--suv)}.tp.ot{background:var(--ot)}.tp.muz{background:var(--muz)}.tp.tosh{background:var(--tosh)}.tp.shamol{background:var(--shamol)}
+.sticky{position:sticky;bottom:0;background:linear-gradient(transparent,var(--bg) 30%);padding:18px 0 8px}
+/* map */
+.theme{margin:12px 0 18px}.theme .name{font-weight:900;font-size:1.1rem;margin:0}.theme .gram{color:var(--muted);font-size:.86rem;margin:0 0 8px}
+.lessons{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.lb{background:var(--panel);border-radius:14px;padding:10px 4px;text-align:center;font-weight:900;color:var(--gold);border:2px solid var(--panel2);position:relative}
+.lb small{display:block;font-weight:700;color:var(--muted);font-size:.7rem}
+.lb.done{border-color:var(--green)}.lb.done::after{content:"✓";position:absolute;top:-8px;right:-6px;background:var(--green);color:#111;border-radius:50%;width:20px;height:20px;font-size:.8rem;line-height:20px}
+.lb.soon{opacity:.35}
+/* prep tabs */
+.tabs{display:flex;gap:6px;margin:10px 0}.tab{flex:1;padding:8px 4px;border-radius:999px;font-weight:800;font-size:.86rem;color:var(--muted);background:var(--panel)}
+.tab[aria-selected="true"]{background:var(--gold);color:#111}
+.panel{display:none}.panel.on{display:block}
+.word{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px dashed var(--panel2)}.word:last-child{border:0}
+.word .uz{font-weight:900;color:var(--gold)}.word .tr{color:var(--muted);text-align:right}
+.rule{background:var(--panel);border-left:5px solid var(--gold);border-radius:8px 14px 14px 8px;padding:12px 14px}
+.rule b{color:var(--gold)}.ex{display:block;background:var(--panel2);border-radius:8px;padding:8px 10px;margin:6px 0}.ex .u{font-weight:800}.ex .r{color:var(--muted);font-size:.93rem}
+.line{display:flex;gap:8px;margin:6px 0}.line .who{color:var(--gold);font-weight:900;min-width:14px}
+/* battle */
+.arena{background:radial-gradient(ellipse at 50% 30%,#2B4A8F,#14213D 70%);border-radius:var(--r);padding:12px;margin:8px 0;position:relative}
+.side{display:flex;align-items:center;gap:10px;margin:6px 0}
+.side.me{flex-direction:row-reverse;text-align:right}
+.side svg{width:120px;height:120px;flex:none;filter:drop-shadow(0 6px 10px rgba(0,0,0,.4))}
+.side.me svg{width:140px;height:140px}
+.hp{flex:1}.hp .nm{font-weight:900}.hp .bar{height:12px;background:#0d1530;border-radius:999px;overflow:hidden;margin:4px 0}
+.hp .fill{height:100%;background:var(--green);border-radius:999px;transition:width .4s}
+.hp .fill.mid{background:var(--gold)}.hp .fill.low{background:var(--red)}
+.hp .num{font-size:.8rem;color:var(--muted)}
+.balls{display:flex;gap:4px}.ball{width:10px;height:10px;border-radius:50%;background:var(--gold)}.ball.out{background:#0d1530;border:1px solid #3a4a7a}
+.log{background:var(--panel);border-radius:12px;padding:10px 14px;min-height:56px;font-weight:700;margin:8px 0}
+.moves{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.mv{background:var(--panel);border-radius:12px;padding:10px 12px;text-align:left;border:2px solid var(--panel2)}
+.mv b{display:block}.mv small{color:var(--muted)}
+.q .stem{font-weight:900;margin:8px 0}.opts{display:grid;gap:8px}
+.opt{text-align:left;background:var(--panel);border:2px solid var(--panel2);border-radius:12px;padding:10px 12px;font-weight:700}
+.opt.right{border-color:var(--green);background:#1c3f33}.opt.wrong{border-color:var(--red);background:#4a2129}
+.team{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.tm{background:var(--panel);border-radius:12px;padding:6px;text-align:center;border:2px solid var(--panel2)}
+.tm svg{width:100%;max-height:60px}.tm.faint{opacity:.35}.tm.active{border-color:var(--gold)}
+.tm small{display:block;font-size:.72rem;color:var(--muted)}
+.shake{animation:shake .35s}@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.flash{animation:flash .4s}@keyframes flash{50%{opacity:.2}}
+@media (prefers-reduced-motion:reduce){.shake,.flash{animation:none}}
+.big{font-size:2rem;text-align:center;margin:20px 0 6px;font-weight:900}
+</style>
+</head>
+<body><div class="app">
+<header><button class="back" id="back" hidden>‹</button><div><h1 id="title">Jonivorlar jangi</h1><div class="sub" id="subtitle">Битвы за узбекский · 5 класс</div></div></header>
+<main id="main"></main>
+</div>
+<script>
+const THEMES = [
+{ id:"t1", uz:"Mening Vatanim", ru:"Моя Родина", gram:"Существительное. Имена собственные и нарицательные",
+  lessons:[
+  { n:1, title:"Vatan, poytaxt, shahar", ru:"Родина, столица, город",
+    words:[["Vatan","Родина"],["poytaxt","столица"],["shahar","город"],["tarixiy obida","исторический памятник"],["zamonaviy","современный"],["bino","здание"],["qadimiy","древний"],["obod","благоустроенный"],["serquyosh","солнечный"],["faxrlanmoq","гордиться"],["donishmand","мудрец"],["qazilma boyliklar","полезные ископаемые"],["tug‘ilmoq","родиться"],["millat","народ, нация"]],
+    rule:`<p><b>Ot</b> — существительное. Это слова, которые называют человека, предмет или место. Они отвечают на вопросы <b>Kim?</b> (кто?), <b>Nima?</b> (что?), <b>Qayer?</b> (где? какое место?).</p>
+<span class="ex"><span class="u">Kim? — Dildora.</span> <span class="r">Nima? — kitob (книга). Qayer? — Toshkent.</span></span>
+<p>В узбекском языке шесть самостоятельных частей речи: <b>ot</b> (существительное), <b>sifat</b> (прилагательное), <b>son</b> (числительное), <b>fe’l</b> (глагол), <b>ravish</b> (наречие), <b>olmosh</b> (местоимение).</p>`,
+    dialog:[["—","Komil, sen qayerda tug‘ilgansan?","Комил, где ты родился?"],["—","Men Toshkent shahrida tug‘ilganman.","Я родился в городе Ташкенте."],["—","Toshkent qanday shahar?","Ташкент — какой город?"],["—","Toshkent — O‘zbekistonning poytaxti.","Ташкент — столица Узбекистана."]],
+    quiz:[
+      {s:"На какой вопрос отвечает слово <i>kitob</i> (книга)?",o:["Kim?","Nima?","Qayer?"],a:1,f:"Предметы отвечают на вопрос Nima? (что?)."},
+      {s:"Как переводится <i>poytaxt</i>?",o:["город","столица","здание"],a:1},
+      {s:"Какое слово отвечает на вопрос <i>Qayer?</i>",o:["Buxoro","Dono","daftar"],a:0,f:"Buxoro — это место (город)."},
+      {s:"<i>Men … tug‘ilganman.</i> Что вставить, чтобы сказать «Я родился в Ташкенте»?",o:["Toshkent","Toshkentda","Toshkentga"],a:1,f:"-da показывает место: Toshkentda — в Ташкенте."},
+      {s:"Сколько самостоятельных частей речи в узбекском языке?",o:["четыре","шесть","восемь"],a:1}
+    ]},
+  { n:2, title:"Atoqli otlar", ru:"Имена собственные",
+    words:[["bayram","праздник"],["Mustaqillik kuni","День независимости"],["nishonlamoq","отмечать (праздник)"],["sayr qilmoq","гулять"],["xiyobon","аллея, сквер"],["tomosha qilmoq","смотреть, любоваться"],["tinch","мирный, спокойный"],["sadoqat","верность"],["tekislik","равнина"],["o‘rmon","лес"],["daryo","река"],["bepoyon","безграничный"],["ko‘rkam","красивый"],["kundan kunga","день ото дня"]],
+    rule:`<p><b>Atoqli otlar</b> — имена собственные. Это имена, которые даны одному конкретному человеку, животному, месту или организации. Пишутся <b>с большой буквы</b>.</p>
+<span class="ex"><span class="u">Rahim Alimov</span> <span class="r">— имя и фамилия</span></span>
+<span class="ex"><span class="u">Olapar</span> <span class="r">— кличка собаки</span></span>
+<span class="ex"><span class="u">Toshkent, Amudaryo, Chimyon</span> <span class="r">— географические названия</span></span>
+<span class="ex"><span class="u">„G‘uncha“ jurnali, „Turkiston“ saroyi</span> <span class="r">— названия журналов, зданий, организаций</span></span>
+<span class="ex"><span class="u">Navro‘z bayrami, Mustaqillik kuni</span> <span class="r">— названия праздников и дат</span></span>`,
+    dialog:[["—","Dono, Mustaqillik bayramini qayerda nishonlading?","Доно, где ты отмечала праздник Независимости?"],["—","Amir Temur xiyoboniga bordik. U yerda katta tomosha bo‘ldi.","Мы ходили на аллею Амира Темура. Там было большое представление."],["—","Sen-chi, bayramda qayerga bording?","А ты, куда ходил на праздник?"],["—","Bobom ikkalamiz shahrimizni sayr qildik.","Мы с дедушкой гуляли по нашему городу."]],
+    quiz:[
+      {s:"Какое из слов — имя собственное?",o:["shahar","Samarqand","daryo"],a:1,f:"Samarqand — название конкретного города."},
+      {s:"Какое из слов — имя собственное?",o:["kitob","jurnal","„G‘uncha“"],a:2,f:"Название журнала — имя собственное, пишется с большой буквы."},
+      {s:"Как правильно написать?",o:["amudaryo","Amudaryo"],a:1},
+      {s:"<i>nishonlamoq</i> — это…",o:["гулять","отмечать","смотреть"],a:1},
+      {s:"Что из этого НЕ имя собственное?",o:["Navro‘z bayrami","Olapar","bayram"],a:2,f:"bayram — просто «праздник», любой."}
+    ]},
+  { n:3, title:"Turdosh otlar", ru:"Нарицательные существительные",
+    words:[["hovli","двор"],["hunar","ремесло"],["parta","парта"],["o‘quvchi","ученик"],["savdo","торговля"],["savdogar","купец, торговец"],["saroy","дворец"],["shuhrat","слава"],["sanoat","промышленность"],["madaniyat","культура"],["sharshara","водопад"],["shifobaxsh","целебный"],["sayyoh","турист"],["mehmondo‘st","гостеприимный"],["mehnatsevar","трудолюбивый"]],
+    rule:`<p><b>Turdosh otlar</b> — нарицательные существительные. Это общее название для похожих людей, предметов и мест. Пишутся с маленькой буквы.</p>
+<span class="ex"><span class="u">ota-ona, o‘quvchi, odam</span> <span class="r">— люди</span></span>
+<span class="ex"><span class="u">parta, hovli, maktab, shahar</span> <span class="r">— предметы и места</span></span>
+<p>Сравни: <b>shahar</b> (город — любой) и <b>Toshkent</b> (один конкретный город).</p>`,
+    dialog:[["—","Do‘stim, sog‘lig‘ing yaxshimi?","Друг, как твоё здоровье?"],["—","Ha, yaxshi. O‘zing-chi, yaxshimisan?","Да, хорошо. А ты, как сам?"],["—","Rahmat, yaxshiman. Onang yaxshi yuribdilarmi?","Спасибо, хорошо. Как поживает твоя мама?"],["—","Rahmat. Onam yaxshilar. Mendan salom ayt.","Спасибо. Мама хорошо. Передай от меня привет."]],
+    quiz:[
+      {s:"Какое из слов — нарицательное?",o:["Chirchiq","Gulchehra","maktab"],a:2},
+      {s:"В каком ряду ВСЕ слова нарицательные?",o:["hovli, hunar, parta","Toshkent, odam, ustoz","Oybek, kitob, Xiva"],a:0},
+      {s:"<i>mehnatsevar</i> — это…",o:["гостеприимный","трудолюбивый","знаменитый"],a:1},
+      {s:"Как спросить «как твоё здоровье?»",o:["Sog‘lig‘ing yaxshimi?","Qayerga ketyapsan?","Mendan salom ayt."],a:0},
+      {s:"<i>sayyoh</i> — это…",o:["водопад","турист","дворец"],a:1}
+    ]},
+  { n:4, title:"Mening o‘lkam", ru:"Мой край",
+    words:[["o‘lka","край"],["boy","богатый"],["paxta","хлопок"],["bug‘doy","пшеница"],["sholi","рис (в поле)"],["meva","фрукты"],["sabzavot","овощи"],["mashhur","знаменитый"],["ma’rifat maskani","центр просвещения"],["mahalla","махалля, квартал"],["qariya","пожилой человек"],["hurmat","уважение"],["tabassum","улыбка"],["ustoz","учитель, наставник"]],
+    rule:`<p>Повторяем: <b>atoqli</b> — с большой буквы, называет одно конкретное; <b>turdosh</b> — с маленькой, называет общее.</p>
+<span class="ex"><span class="u">Turdosh:</span> <span class="r">shahar, odam, ustoz, neft, bug‘doy, oshpaz</span></span>
+<span class="ex"><span class="u">Atoqli:</span> <span class="r">Sirdaryo, Alisher Navoiy, Navro‘z bayrami, Nukus, „Zulfiya“ mukofoti</span></span>
+<p>Пословицы о Родине из урока:</p>
+<span class="ex"><span class="u">Vatan ostonadan boshlanadi.</span> <span class="r">Родина начинается с порога.</span></span>
+<span class="ex"><span class="u">Yurt tinchligi — el boyligi.</span> <span class="r">Мир в стране — богатство народа.</span></span>`,
+    dialog:[["","mening mahallam — моя махалля",""],["","sening uying — твой дом",""],["","ko‘chamiz — наша улица",""],["","obod yurt — благоустроенная страна",""]],
+    quiz:[
+      {s:"<i>Sirdaryo</i> — это…",o:["turdosh ot","atoqli ot"],a:1,f:"Название реки — имя собственное."},
+      {s:"<i>oshpaz</i> (повар) — это…",o:["turdosh ot","atoqli ot"],a:0},
+      {s:"<i>bug‘doy</i> — это…",o:["хлопок","пшеница","рис"],a:1},
+      {s:"Продолжи: <i>Vatan … boshlanadi.</i>",o:["ostonadan","shahardan","maktabdan"],a:0,f:"Родина начинается с порога."},
+      {s:"В каком ряду только имена собственные?",o:["Nukus, Zarafshon, Lobar","gaz, ko‘mir, neft","ustoz, maktab, Xiva"],a:0}
+    ]},
+  { n:5, title:"Yurt haqida maqollar", ru:"Пословицы о Родине",
+    words:[["yurt","страна, край"],["qo‘rimoq","охранять"],["yigit","юноша, парень"],["tuzmoq","строить, создавать"],["buzmoq","разрушать"],["qadr","ценность, цена"],["sezilmoq","чувствоваться"],["shaxmat","шахматы"],["she’r","стихотворение"],["gulzor","цветник"],["oila","семья"],["ko‘ylak","платье, рубашка"],["shoir","поэт"],["to‘plam","сборник"]],
+    rule:`<p>Народные пословицы из урока:</p>
+<span class="ex"><span class="u">Yurti boyning o‘zi boy.</span> <span class="r">Богата страна — богат и её человек.</span></span>
+<span class="ex"><span class="u">Yaxshi yigit yurt tuzar, yomon yigit yurt buzar.</span> <span class="r">Хороший юноша страну строит, плохой — разрушает.</span></span>
+<span class="ex"><span class="u">O‘z yurtingning qadri boshqa yurtda sezilar.</span> <span class="r">Цену своей страны чувствуешь в чужой.</span></span>
+<p>Упражнение из учебника: разложи слова на две группы — <b>atoqli</b> (Rustam Qosimjonov, Zulfiya, Andijon, Lobar, Ahror, Qora dengiz) и <b>turdosh</b> (shaxmat, nishon, she’r, kitob, choynak, oila, maktab, gul, gulzor, duradgor, ko‘ylak, yigit, vatan).</p>
+<p>В уроке также говорится о детском поэте <b>Zafar Diyor</b> (род. 1912) и его стихотворении «Yashna, Vatan!».</p>`,
+    dialog:[],
+    quiz:[
+      {s:"<i>Yaxshi yigit yurt …, yomon yigit yurt buzar.</i>",o:["tuzar","ko‘rar","sotar"],a:0},
+      {s:"<i>qo‘rimoq</i> — это…",o:["разрушать","охранять","строить"],a:1},
+      {s:"<i>Qora dengiz</i> — это…",o:["atoqli ot","turdosh ot"],a:0,f:"Чёрное море — название."},
+      {s:"<i>gulzor</i> — это…",o:["цветник","платье","сборник"],a:0},
+      {s:"Что значит <i>yurt</i>?",o:["дом","страна, край","город"],a:1}
+    ]}
+  ]},
+{ id:"t2", uz:"Oila a’zolarining ish kuni", ru:"Рабочий день членов семьи", gram:"Названия людей и профессий. Суффиксы -chi, -kor, -bon, -soz… и -lik, -chilik",
+  lessons:[
+  { n:1, title:"Mening oilam", ru:"Моя семья",
+    words:[["ota / dada","отец / папа"],["ona / oyi","мать / мама"],["aka","старший брат"],["uka","младший брат"],["opa","старшая сестра"],["singil","младшая сестра"],["bobo / buva","дедушка"],["buvi","бабушка"],["amaki","дядя (брат отца)"],["tog‘a","дядя (брат матери)"],["amma","тётя (сестра отца)"],["xola","тётя (сестра матери)"],["ertalab","утром"],["yaqin / uzoq","близко / далеко"],["haydovchi","водитель"],["shifokor","врач"]],
+    rule:`<p><b>Shaxs otlari</b> — названия людей по профессии. Они бывают <b>tub</b> (простые, без суффикса) и <b>yasama</b> (образованные с помощью суффикса).</p>
+<span class="ex"><span class="u">Tub:</span> <span class="r">dehqon (земледелец), xonanda (певец), raqqosa (танцовщица)</span></span>
+<p>Суффиксы, которые делают из слова название профессии: <b>-chi, -kor, -bon, -soz, -shunos, -paz, -gar, -dor, -do‘z, -kash, -dosh</b>.</p>
+<span class="ex"><span class="u">ish+chi → ishchi</span> <span class="r">рабочий</span></span>
+<span class="ex"><span class="u">paxta+kor → paxtakor</span> <span class="r">хлопкороб</span></span>
+<span class="ex"><span class="u">bog‘+bon → bog‘bon</span> <span class="r">садовник</span></span>
+<span class="ex"><span class="u">soat+soz → soatsoz</span> <span class="r">часовщик</span></span>
+<span class="ex"><span class="u">osh+paz → oshpaz</span> <span class="r">повар</span></span>
+<span class="ex"><span class="u">etik+do‘z → etikdo‘z</span> <span class="r">сапожник</span></span>
+<span class="ex"><span class="u">sinf+dosh → sinfdosh</span> <span class="r">одноклассник</span></span>`,
+    dialog:[["","Dadam bilan oyim har kuni ertalab ishga ketadilar.","Папа с мамой каждый день утром уходят на работу."],["","Oyim shifokor, shuning uchun shifoxonaga ketadilar.","Мама врач, поэтому она идёт в больницу."],["","Dadam haydovchi, boshqa shaharlarga yuk tashiydilar.","Папа водитель, возит грузы в другие города."],["","Buvim uy bekasi.","Бабушка — домохозяйка."]],
+    quiz:[
+      {s:"Как сказать «младшая сестра»?",o:["opa","singil","amma"],a:1},
+      {s:"<i>tog‘a</i> — это…",o:["дядя по маме","дядя по папе","дедушка"],a:0},
+      {s:"Какое слово образовано суффиксом <i>-soz</i>?",o:["oshpaz","soatsoz","bog‘bon"],a:1},
+      {s:"<i>oshpaz</i> — это…",o:["повар","садовник","рабочий"],a:0},
+      {s:"Какое слово <b>tub</b> (без суффикса)?",o:["ishchi","dehqon","paxtakor"],a:1},
+      {s:"<i>sinfdosh</i> — это…",o:["учитель","одноклассник","ученик"],a:1}
+    ]},
+  { n:2, title:"Kasb-hunar nomlari", ru:"Названия ремёсел",
+    words:[["tadbirkor","предприниматель"],["muzokara","переговоры"],["xaridor","покупатель"],["rassom","художник"],["rasm chizmoq","рисовать"],["ilhom","вдохновение"],["ko‘rgazma","выставка"],["taniqli","известный"],["qarindosh","родственник"],["imtihon","экзамен"],["mazali","вкусный"],["taklif qilmoq","приглашать"],["kulol","гончар"],["novvoy","пекарь"],["zardo‘z","золотошвей"]],
+    rule:`<p>Названия ремёсел, отраслей и занятий образуются суффиксами <b>-lik</b> и <b>-chilik</b>.</p>
+<span class="ex"><span class="u">quruvchi+lik → quruvchilik</span> <span class="r">строительство</span></span>
+<span class="ex"><span class="u">zardo‘z+lik → zardo‘zlik</span> <span class="r">золотое шитьё</span></span>
+<span class="ex"><span class="u">dehqon+chilik → dehqonchilik</span> <span class="r">земледелие</span></span>
+<span class="ex"><span class="u">kulol+chilik → kulolchilik</span> <span class="r">гончарное дело</span></span>
+<span class="ex"><span class="u">pazanda+chilik → pazandachilik</span> <span class="r">кулинария</span></span>
+<p>Правило простое: <b>-lik</b> чаще после названия человека с суффиксом (quruvchi, rassom), <b>-chilik</b> — после короткой основы (dehqon, kulol, paxta).</p>`,
+    dialog:[["","Mening akam rassom.","Мой старший брат — художник."],["","Akam rasm chizishga bolaligidan qiziqqan.","Брат с детства увлекался рисованием."],["","Hozirgi kunda akam taniqli rassom.","Сейчас брат — известный художник."],["","Har yili ularning ko‘rgazmalari tashkil qilinadi.","Каждый год устраивают его выставки."]],
+    quiz:[
+      {s:"<i>kulol</i> + ? = гончарное дело",o:["-lik","-chilik"],a:1,f:"kulolchilik"},
+      {s:"<i>quruvchi</i> + ? = строительство",o:["-lik","-chilik"],a:0,f:"quruvchilik"},
+      {s:"<i>tadbirkor</i> — это…",o:["покупатель","предприниматель","художник"],a:1},
+      {s:"<i>ko‘rgazma</i> — это…",o:["выставка","экзамен","вдохновение"],a:0},
+      {s:"Как сказать «пригласить»?",o:["taklif qilmoq","rasm chizmoq","muzokara"],a:0}
+    ]},
+  { n:3, title:"Kattalarga murojaat", ru:"Обращение к старшим",
+    words:[["muhandis","инженер"],["dastur","программа"],["barvaqt","рано"],["maslahatlashmoq","советоваться"],["tanlov","конкурс"],["betob","больной"],["davolamoq","лечить"],["maqsad","цель"],["navbatchilik qilmoq","дежурить"],["orzu qilmoq","мечтать"],["qayg‘urmoq","заботиться"],["kasb","профессия"],["shifoxona","больница"],["tarjima qilmoq","переводить"]],
+    rule:`<p><b>Muomala odobi</b> — как вежливо обращаться к старшим. К имени родства добавляем ласковое <b>-jon</b>, к незнакомым взрослым обращаемся словами родства.</p>
+<span class="ex"><span class="u">Assalomu alaykum, dadajon! (buvajon, buvijon…)</span> <span class="r">Здравствуйте, папочка!</span></span>
+<span class="ex"><span class="u">Amaki (xola, opa, aka), keyingi bekatda tushmasangiz, meni o‘tkazib yuboring.</span> <span class="r">Дядя (тётя…), если вы не выходите на следующей остановке, пропустите меня.</span></span>
+<span class="ex"><span class="u">Ustoz, menga yangi mavzuni tushuntirib bering.</span> <span class="r">Учитель, объясните мне новую тему.</span></span>
+<p>Обрати внимание: о старших говорят во множественном числе из уважения — <b>onam ishlaydilar</b> (мама работает), <b>dadam kelDILAR</b>.</p>`,
+    dialog:[["—","Bobur, uyga ketyapsanmi?","Бобур, ты идёшь домой?"],["—","Yo‘q, amakimnikiga ketyapman.","Нет, иду к дяде."],["—","Amaking muhandislar-a?","Твой дядя ведь инженер?"],["—","Ha. Multimediya dasturini tayyorlash bo‘yicha maslahatlashmoqchiman.","Да. Хочу посоветоваться насчёт мультимедийной программы."]],
+    quiz:[
+      {s:"Как обратиться к учителю с просьбой объяснить тему?",o:["Ustoz, tushuntirib bering.","Ustoz, ketyapsizmi?","Ustoz, salom ayt."],a:0},
+      {s:"<i>davolamoq</i> — это…",o:["лечить","мечтать","дежурить"],a:0},
+      {s:"<i>Onam shifokor bo‘lishni … qilganlar.</i> (мечтала)",o:["orzu","maqsad","tanlov"],a:0},
+      {s:"<i>betob</i> — это…",o:["рано","больной","цель"],a:1},
+      {s:"Почему говорят <i>dadam keldilar</i>, а не <i>keldi</i>?",o:["папа не один","из уважения к старшему","так короче"],a:1}
+    ]},
+  { n:4, title:"Kim qayerda ishlaydi?", ru:"Кто где работает?",
+    words:[["kutubxona","библиотека"],["kutubxonachi","библиотекарь"],["yordam bermoq","помогать"],["quruvchi","строитель"],["havas qilmoq","восхищаться, хотеть быть как"],["dam olmoq","отдыхать"],["gazeta o‘qimoq","читать газету"],["bog‘cha","детский сад"],["stadion","стадион"],["talaba","студент"],["gilamdo‘z","ковровщик"],["o‘qituvchi","учитель"],["katta bo‘lmoq","вырасти"]],
+    rule:`<p>Чтобы сказать, куда кто-то идёт, добавляем к месту <b>-ga</b>. Чтобы сказать, где кто-то работает, — <b>-da</b>.</p>
+<span class="ex"><span class="u">Buvam mahalla idorasiga boradilar.</span> <span class="r">Дедушка ходит в махаллинскую контору.</span></span>
+<span class="ex"><span class="u">Onam kutubxonada ishlaydilar.</span> <span class="r">Мама работает в библиотеке.</span></span>
+<p>Вопрос о будущей профессии:</p>
+<span class="ex"><span class="u">— Sen katta bo‘lganingda kim bo‘lmoqchisan?</span> <span class="r">— Кем ты хочешь стать, когда вырастешь?</span></span>
+<span class="ex"><span class="u">— Quruvchi bo‘lmoqchiman, chunki amakim quruvchilar.</span> <span class="r">— Хочу стать строителем, потому что мой дядя строитель.</span></span>`,
+    dialog:[["—","Salom, Salima. Qayerga ketyapsan?","Привет, Салима. Куда идёшь?"],["—","Kutubxonaga.","В библиотеку."],["—","Nimaga?","Зачем?"],["—","Onam kutubxonada ishlaydilar. Ularga yordam bermoqchiman.","Мама работает в библиотеке. Хочу ей помочь."]],
+    quiz:[
+      {s:"Найди ошибку: <i>Onam kutubxonachi, ular bozorda ishlaydilar.</i>",o:["kutubxonachi работает в kutubxona","всё правильно"],a:0,f:"Библиотекарь работает в библиотеке, а не на базаре."},
+      {s:"<i>Ukam … boradi.</i> (в детский сад)",o:["bog‘chaga","bog‘chada","bog‘cha"],a:0},
+      {s:"<i>Otam stadion… ishlaydilar.</i>",o:["-ga","-da"],a:1},
+      {s:"Кто такой <i>talaba</i>?",o:["студент","строитель","ученик"],a:0},
+      {s:"«Кем хочешь стать?» — …",o:["Kim bo‘lmoqchisan?","Qayerga ketyapsan?","Nimaga?"],a:0}
+    ]},
+  { n:5, title:"Kasblar va ishlar", ru:"Профессии и дела",
+    words:[["suxandon","ведущий, диктор"],["tikuvchi","швея, портной"],["uchuvchi","лётчик"],["hamshira","медсестра"],["xonanda","певец"],["san’atkor","артист"],["sportchi","спортсмен"],["ishchi","рабочий"],["qadrdon","родной, дорогой"],["xonadon","дом, семья"],["yumush","работа, дело"],["ahil","дружный"],["ism","имя"],["alla","колыбельная"],["mehribon","добрый, заботливый"],["chevar","мастерица"]],
+    rule:`<p>Собираем всё вместе. Что делает каждый:</p>
+<span class="ex"><span class="u">Sportchi sport mashqlari bilan shug‘ullanadi.</span> <span class="r">Спортсмен занимается спортивными упражнениями.</span></span>
+<span class="ex"><span class="u">Shifokor odamlarni davolaydi.</span> <span class="r">Врач лечит людей.</span></span>
+<span class="ex"><span class="u">O‘qituvchi bolalarga dars beradi.</span> <span class="r">Учитель даёт детям уроки.</span></span>
+<span class="ex"><span class="u">Xonanda qo‘shiq aytadi.</span> <span class="r">Певец поёт песни.</span></span>
+<p>Полезная связка: <b>… bilan shug‘ullanmoq</b> — заниматься чем-то. <i>Oilamiz qadimdan kulolchilik bilan shug‘ullanishgan.</i> — Наша семья издавна занималась гончарным делом.</p>`,
+    dialog:[["—","Men katta bo‘lganimda kulol bo‘lmoqchiman.","Когда вырасту, хочу стать гончаром."],["—","Nega?","Почему?"],["—","Chunki oilamiz qadimdan kulolchilik bilan shug‘ullanishgan.","Потому что наша семья издавна занималась гончарным делом."],["—","Menga ham kulolchilik yoqadi.","Мне тоже нравится гончарное дело."]],
+    quiz:[
+      {s:"<i>uchuvchi</i> — это…",o:["швея","лётчик","ведущий"],a:1,f:"uch- (лететь) + -uvchi"},
+      {s:"Кто поёт песни?",o:["xonanda","hamshira","tikuvchi"],a:0},
+      {s:"<i>ahil oila</i> — это…",o:["большая семья","дружная семья","богатая семья"],a:1},
+      {s:"«заниматься чем-то» — …",o:["… bilan shug‘ullanmoq","… bilan ketmoq","… bilan aytmoq"],a:0},
+      {s:"<i>hamshira</i> — это…",o:["мастерица","медсестра","певица"],a:1}
+    ]}
+  ]},
+{ id:"t3", uz:"Yangi fanlarni o‘rganamiz", ru:"Изучаем новые предметы", gram:"Названия мест и предметов", soon:true, lessons:[] },
+{ id:"t4", uz:"Ustozga rahmat!", ru:"Спасибо учителю!", gram:"Множественное число: -lar", soon:true, lessons:[] },
+{ id:"t5", uz:"Mening sinfdoshlarim", ru:"Мои одноклассники", gram:"Притяжательные суффиксы", soon:true, lessons:[] }
+];
+
+/* ---------- ORIGINAL CREATURES ---------- */
+const TYPES={olov:"Olov · огонь",suv:"Suv · вода",ot:"O‘t · трава",muz:"Muz · лёд",tosh:"Tosh · камень",shamol:"Shamol · ветер"};
+const BEATS={olov:"ot",ot:"suv",suv:"olov",muz:"shamol",shamol:"tosh",tosh:"muz"};
+const COLORS={olov:"#F26B3A",suv:"#3FA7E8",ot:"#5DC26B",muz:"#8FD8F0",tosh:"#C49A5E",shamol:"#C48BF0"};
+const DEX=[
+ {id:"qovunbek",nm:"Qovunbek",ru:"дынный медвежонок",t:"ot",hp:110,atk:22,shape:"round",ears:"round",extra:"stripes"},
+ {id:"anorcha",nm:"Anorcha",ru:"гранатовый лисёнок",t:"olov",hp:90,atk:28,shape:"round",ears:"tri",extra:"tail"},
+ {id:"ilvirs",nm:"Ilvirs",ru:"снежный барсик",t:"muz",hp:100,atk:26,shape:"oval",ears:"round",extra:"spots"},
+ {id:"laylakjon",nm:"Laylakjon",ru:"аистёнок",t:"shamol",hp:85,atk:27,shape:"egg",ears:"none",extra:"beak"},
+ {id:"tuyachi",nm:"Tuyachi",ru:"верблюжонок",t:"tosh",hp:130,atk:18,shape:"hump",ears:"round",extra:"none"},
+ {id:"baliqvoy",nm:"Baliqvoy",ru:"рыбка-задира",t:"suv",hp:80,atk:30,shape:"fish",ears:"none",extra:"fin"},
+ {id:"toshbaqir",nm:"Toshbaqir",ru:"черепашка",t:"suv",hp:140,atk:16,shape:"dome",ears:"none",extra:"shell"},
+ {id:"chumolboy",nm:"Chumolboy",ru:"муравей-силач",t:"tosh",hp:95,atk:25,shape:"oval",ears:"ant",extra:"none"},
+ {id:"borivoy",nm:"Bo‘rivoy",ru:"волчонок",t:"muz",hp:105,atk:24,shape:"oval",ears:"tri",extra:"tail"},
+ {id:"kapalakcha",nm:"Kapalakcha",ru:"бабочка",t:"shamol",hp:70,atk:32,shape:"round",ears:"ant",extra:"wings"},
+ {id:"kaklikcha",nm:"Kaklikcha",ru:"куропаточка",t:"ot",hp:90,atk:26,shape:"egg",ears:"none",extra:"beak"},
+ {id:"lolachi",nm:"Lolachi",ru:"тюльпанчик",t:"olov",hp:100,atk:24,shape:"round",ears:"petal",extra:"stripes"}
+];
+function art(m,flip){
+ const c=COLORS[m.t], d="#14213D";
+ let body="";
+ const dark=shade(c,-30), light=shade(c,40);
+ if(m.shape==="round") body=`<circle cx="60" cy="66" r="38" fill="${c}"/>`;
+ if(m.shape==="oval") body=`<ellipse cx="60" cy="68" rx="40" ry="34" fill="${c}"/>`;
+ if(m.shape==="egg") body=`<path d="M60 22c22 0 36 26 36 48a36 36 0 0 1-72 0c0-22 14-48 36-48z" fill="${c}"/>`;
+ if(m.shape==="hump") body=`<path d="M20 90c0-30 15-44 40-44s40 14 40 44z" fill="${c}"/><circle cx="60" cy="48" r="16" fill="${c}"/>`;
+ if(m.shape==="fish") body=`<ellipse cx="56" cy="66" rx="40" ry="28" fill="${c}"/><path d="M92 66l22-18v36z" fill="${dark}"/>`;
+ if(m.shape==="dome") body=`<path d="M18 78a42 42 0 0 1 84 0z" fill="${dark}"/><ellipse cx="60" cy="82" rx="46" ry="12" fill="${c}"/><circle cx="20" cy="70" r="12" fill="${c}"/>`;
+ let ears="";
+ if(m.ears==="round") ears=`<circle cx="30" cy="34" r="12" fill="${c}"/><circle cx="90" cy="34" r="12" fill="${c}"/><circle cx="30" cy="34" r="6" fill="${light}"/><circle cx="90" cy="34" r="6" fill="${light}"/>`;
+ if(m.ears==="tri") ears=`<path d="M26 44l6-30 22 18z" fill="${c}"/><path d="M94 44l-6-30-22 18z" fill="${c}"/>`;
+ if(m.ears==="ant") ears=`<path d="M45 34q-6-20 -18-24" stroke="${dark}" stroke-width="3" fill="none"/><path d="M75 34q6-20 18-24" stroke="${dark}" stroke-width="3" fill="none"/><circle cx="27" cy="10" r="4" fill="${dark}"/><circle cx="93" cy="10" r="4" fill="${dark}"/>`;
+ if(m.ears==="petal") ears=`<path d="M60 8l12 22H48z" fill="${light}"/><path d="M40 14l14 18-20 4z" fill="${light}"/><path d="M80 14l-14 18 20 4z" fill="${light}"/>`;
+ let extra="";
+ if(m.extra==="stripes") extra=`<path d="M40 40q20 10 40 0M36 52q24 12 48 0M40 96q20-10 40 0" stroke="${dark}" stroke-width="4" fill="none" opacity=".6"/>`;
+ if(m.extra==="tail") extra=`<path d="M96 80q26-6 20-30" stroke="${c}" stroke-width="12" stroke-linecap="round" fill="none"/><circle cx="116" cy="50" r="7" fill="${light}"/>`;
+ if(m.extra==="spots") extra=`<circle cx="40" cy="80" r="5" fill="${dark}"/><circle cx="78" cy="84" r="5" fill="${dark}"/><circle cx="60" cy="96" r="4" fill="${dark}"/>`;
+ if(m.extra==="beak") extra=`<path d="M60 66l-16 8 16 8z" fill="${"#F5B82E"}" transform="translate(-4 0)"/>`;
+ if(m.extra==="fin") extra=`<path d="M50 38l10-16 10 16z" fill="${dark}"/>`;
+ if(m.extra==="shell") extra=`<path d="M40 60l20-16 20 16-8 18H48z" fill="${light}" opacity=".5"/>`;
+ if(m.extra==="wings") extra=`<ellipse cx="22" cy="60" rx="18" ry="26" fill="${light}" opacity=".9"/><ellipse cx="98" cy="60" rx="18" ry="26" fill="${light}" opacity=".9"/>`;
+ const eyesY = m.shape==="hump"?46: m.shape==="dome"?66:60, ex=m.shape==="fish"?46:52, ex2=m.shape==="fish"?70:68;
+ const eyes=`<circle cx="${ex}" cy="${eyesY}" r="6" fill="#fff"/><circle cx="${ex2}" cy="${eyesY}" r="6" fill="#fff"/><circle cx="${ex+1}" cy="${eyesY+1}" r="3" fill="${d}"/><circle cx="${ex2+1}" cy="${eyesY+1}" r="3" fill="${d}"/><path d="M${ex+4} ${eyesY+14}q6 6 12 0" stroke="${d}" stroke-width="3" fill="none" stroke-linecap="round"/>`;
+ const feet = (m.shape==="fish"||m.shape==="dome")?"":`<ellipse cx="42" cy="104" rx="10" ry="5" fill="${dark}"/><ellipse cx="78" cy="104" rx="10" ry="5" fill="${dark}"/>`;
+ return `<svg viewBox="0 0 120 112" xmlns="http://www.w3.org/2000/svg" ${flip?'style="transform:scaleX(-1)"':''}>${ears}${extra}${body}${eyes}${feet}</svg>`;
+}
+function shade(hex,p){const n=parseInt(hex.slice(1),16);let r=(n>>16)+p,g=((n>>8)&255)+p,b=(n&255)+p;r=Math.max(0,Math.min(255,r));g=Math.max(0,Math.min(255,g));b=Math.max(0,Math.min(255,b));return "#"+((r<<16)|(g<<8)|b).toString(16).padStart(6,"0");}
+
+/* ---------- STATE ---------- */
+let teamIds=[], done={}, cur=null;
+const $=s=>document.querySelector(s); const main=$("#main");
+async function load(){try{const v=localStorage.getItem("jj-save");if(v){const s=JSON.parse(v);teamIds=s.team||[];done=s.done||{};}}catch(e){}}
+async function save(){try{localStorage.setItem("jj-save",JSON.stringify({team:teamIds,done}));}catch(e){}}
+function setHead(t,s,back){$("#title").textContent=t;$("#subtitle").textContent=s;$("#back").hidden=!back;}
+const roman=n=>["I","II","III","IV","V"][n-1];
+const rnd=a=>a[Math.floor(Math.random()*a.length)];
+const shuffle=a=>a.map(x=>[Math.random(),x]).sort((a,b)=>a[0]-b[0]).map(x=>x[1]);
+
+/* ---------- PICK TEAM ---------- */
+function pickTeam(){
+ setHead("Jamoa tanlash","Выбери 6 существ для команды",teamIds.length===6);
+ let sel=[...teamIds];
+ const draw=()=>{
+  main.innerHTML=`<p class="muted">Огонь бьёт траву, трава — воду, вода — огонь. Лёд бьёт ветер, ветер — камень, камень — лёд. Собери разные типы.</p>
+  <div class="dex">${DEX.map(m=>{const i=sel.indexOf(m.id);return `<button class="mon ${i>=0?'sel':''}" data-slot="${i+1}" data-id="${m.id}">${art(m)}<div class="nm">${m.nm}</div><div class="muted" style="font-size:.72rem">${m.ru}</div><span class="tp ${m.t}">${TYPES[m.t].split(" ")[0]}</span><div class="muted" style="font-size:.7rem">HP ${m.hp} · сила ${m.atk}</div></button>`}).join("")}</div>
+  <div class="sticky"><button class="btn wide" id="go" ${sel.length===6?"":"disabled"}>${sel.length===6?"В бой!":"Выбрано "+sel.length+" из 6"}</button></div>`;
+  main.querySelectorAll(".mon").forEach(b=>b.onclick=()=>{const id=b.dataset.id;const i=sel.indexOf(id);if(i>=0)sel.splice(i,1);else if(sel.length<6)sel.push(id);draw();});
+  $("#go").onclick=()=>{teamIds=sel;save();map();};
+ };
+ draw();
+}
+
+/* ---------- MAP ---------- */
+function map(){
+ cur=null; setHead("Jonivorlar jangi","Выбери урок — это бой с соперником",false);
+ let h=`<div class="card"><div class="team">${teamIds.map(id=>{const m=DEX.find(x=>x.id===id);return `<div class="tm">${art(m)}<small>${m.nm}</small></div>`}).join("")}</div><button class="btn sec wide" id="reteam">Сменить команду</button></div>`;
+ THEMES.forEach((t,ti)=>{
+  h+=`<section class="theme"><p class="name">${roman(ti+1)}. ${t.uz} <span class="muted">— ${t.ru}</span></p><p class="gram">${t.gram}</p><div class="lessons">`;
+  if(t.soon){for(let i=1;i<=4;i++)h+=`<button class="lb soon" disabled>${i}<small>скоро</small></button>`}
+  else t.lessons.forEach(l=>{const k=`${t.id}-${l.n}`;h+=`<button class="lb ${done[k]?'done':''}" data-t="${ti}" data-l="${l.n-1}">${l.n}<small>jang</small></button>`});
+  h+=`</div></section>`;
+ });
+ main.innerHTML=h;
+ main.querySelectorAll(".lb[data-t]").forEach(b=>b.onclick=()=>prep(+b.dataset.t,+b.dataset.l));
+ $("#reteam").onclick=pickTeam; window.scrollTo(0,0);
+}
+
+/* ---------- PREP (study before battle) ---------- */
+function prep(ti,li){
+ const t=THEMES[ti],L=t.lessons[li]; cur={ti,li};
+ setHead(`${roman(ti+1)}. ${L.n}-dars`,t.uz,true);
+ const words=L.words.map(w=>`<div class="word"><span class="uz">${w[0]}</span><span class="tr">${w[1]}</span></div>`).join("");
+ const dlg=L.dialog.length?L.dialog.map(d=>`<div class="line"><span class="who">${d[0]}</span><div><b>${d[1]}</b>${d[2]?`<div class="muted">${d[2]}</div>`:""}</div></div>`).join(""):`<p class="muted">В этом уроке диалога нет.</p>`;
+ main.innerHTML=`<h2>${L.title}</h2><p class="muted">${L.ru}. Соперник будет спрашивать именно это — сначала подготовься.</p>
+ <div class="tabs"><button class="tab" data-p="w" aria-selected="true">Слова</button><button class="tab" data-p="r">Правило</button><button class="tab" data-p="d">Фразы</button></div>
+ <div class="panel on" id="p-w"><div class="card">${words}</div></div>
+ <div class="panel" id="p-r"><div class="rule">${L.rule}</div></div>
+ <div class="panel" id="p-d"><div class="card">${dlg}</div></div>
+ <div class="sticky"><button class="btn wide" id="fight">Начать бой</button></div>`;
+ main.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{main.querySelectorAll(".tab").forEach(x=>x.setAttribute("aria-selected",x===b));main.querySelectorAll(".panel").forEach(x=>x.classList.toggle("on",x.id==="p-"+b.dataset.p));});
+ $("#fight").onclick=()=>battle(ti,li); window.scrollTo(0,0);
+}
+
+/* ---------- QUESTIONS ---------- */
+function makeQuestions(ti,li){
+ const t=THEMES[ti],L=t.lessons[li];
+ const vocab=[], allWords=t.lessons.flatMap(l=>l.words);
+ L.words.forEach(w=>{
+  const others=shuffle(allWords.filter(x=>x[1]!==w[1])).slice(0,2).map(x=>x[1]);
+  const o=shuffle([w[1],...others]); vocab.push({s:`Что значит <i>${w[0]}</i>?`,o,a:o.indexOf(w[1]),k:"v"});
+  const o2=shuffle([w[0],...shuffle(allWords.filter(x=>x[0]!==w[0])).slice(0,2).map(x=>x[0])]); vocab.push({s:`Как по-узбекски «${w[1]}»?`,o:o2,a:o2.indexOf(w[0]),k:"v"});
+ });
+ const quiz=L.quiz.map(q=>({...q,k:"q"}));
+ return {v:shuffle(vocab),q:shuffle(quiz)};
+}
+
+/* ---------- BATTLE ---------- */
+const MOVES=[
+ {nm:"So‘z hujumi",ru:"слово · 25",pow:25,k:"v"},
+ {nm:"Qoida zarbasi",ru:"правило · 40",pow:40,k:"q"},
+ {nm:"Tarjima",ru:"перевод · 25",pow:25,k:"v"},
+ {nm:"Katta hujum",ru:"правило · 55, но если ошибка — соперник бьёт дважды",pow:55,k:"q",risk:true}
+];
+function battle(ti,li){
+ const key=`${THEMES[ti].id}-${THEMES[ti].lessons[li].n}`;
+ const Q=makeQuestions(ti,li); let qi={v:0,q:0};
+ const nextQ=k=>{const arr=Q[k];const q=arr[qi[k]%arr.length];qi[k]++;return q;};
+ const my=teamIds.map(id=>({...DEX.find(m=>m.id===id),cur:DEX.find(m=>m.id===id).hp}));
+ const foeIds=shuffle(DEX.filter(m=>!teamIds.includes(m.id)).map(m=>m.id)).slice(0,3);
+ const foe=foeIds.map(id=>({...DEX.find(m=>m.id===id),cur:DEX.find(m=>m.id===id).hp}));
+ let a=0,f=0,log="Бой начался! Выбери атаку.",lock=false,streak=0;
+ const trainer=rnd(["Dono","Komil","Aziz","Zumrad","Bobur","Dildora"]);
+ setHead("Jang!",`Соперник — ${trainer}`,true);
+ const mult=(x,y)=>BEATS[x.t]===y.t?1.5:BEATS[y.t]===x.t?.7:1;
+ const hpbar=m=>{const p=Math.max(0,m.cur/m.hp*100);return `<div class="hp"><div class="nm">${m.nm} <span class="tp ${m.t}" style="font-size:.65rem">${TYPES[m.t].split(" ")[0]}</span></div><div class="bar"><div class="fill ${p<25?'low':p<55?'mid':''}" style="width:${p}%"></div></div><div class="num">${Math.max(0,m.cur)} / ${m.hp}</div></div>`;};
+ const balls=arr=>`<div class="balls">${arr.map(m=>`<span class="ball ${m.cur<=0?'out':''}"></span>`).join("")}</div>`;
+ function draw(question){
+  const M=my[a],F=foe[f];
+  main.innerHTML=`<div class="arena">
+   <div class="side foe" id="foeS">${art(F)}${hpbar(F)}</div>${balls(foe)}
+   <div class="side me" id="meS">${art(M,true)}${hpbar(M)}</div>${balls(my)}
+  </div>
+  <div class="log" id="log">${log}</div>
+  <div id="act"></div>`;
+  const act=$("#act");
+  if(question){
+   act.innerHTML=`<div class="q"><div class="stem">${question.q.s}</div><div class="opts">${question.q.o.map((o,j)=>`<button class="opt" data-j="${j}">${o}</button>`).join("")}</div></div>`;
+   act.querySelectorAll(".opt").forEach(b=>b.onclick=()=>answer(question,+b.dataset.j,act));
+  } else {
+   act.innerHTML=`<div class="moves">${MOVES.map((m,i)=>`<button class="mv" data-i="${i}"><b>${m.nm}</b><small>${m.ru}</small></button>`).join("")}</div>
+   <div class="card" style="margin-top:10px"><div class="muted" style="font-size:.85rem;margin-bottom:6px">Сменить существо (тратит ход):</div><div class="team">${my.map((m,i)=>`<button class="tm ${m.cur<=0?'faint':''} ${i===a?'active':''}" data-i="${i}" ${m.cur<=0||i===a?'disabled':''}>${art(m)}<small>${m.nm} ${m.cur}/${m.hp}</small></button>`).join("")}</div></div>`;
+   act.querySelectorAll(".mv").forEach(b=>b.onclick=()=>{const mv=MOVES[+b.dataset.i];draw({mv,q:nextQ(mv.k)});});
+   act.querySelectorAll(".tm").forEach(b=>b.onclick=()=>{a=+b.dataset.i;log=`Вперёд, ${my[a].nm}!`;foeTurn();});
+  }
+ }
+ function answer(question,j,act){
+  const q=question.q, mv=question.mv, M=my[a], F=foe[f];
+  act.querySelectorAll(".opt").forEach(x=>{x.disabled=true;if(+x.dataset.j===q.a)x.classList.add("right");});
+  if(j===q.a){
+   streak++; const k=mult(M,F); const dmg=Math.round((mv.pow+M.atk/2)*k*(streak>=3?1.2:1));
+   F.cur-=dmg; log=`${M.nm} применил ${mv.nm}: −${dmg}${k>1?" (очень эффективно!)":k<1?" (не очень эффективно)":""}${streak>=3?" · серия ×1.2":""}`;
+   setTimeout(()=>{draw();$("#foeS").classList.add("shake");setTimeout(()=>{ if(F.cur<=0){foeFaint();} else foeTurn(); },500);},600);
+  } else {
+   streak=0; log=`Мимо! Правильно: «${q.o[q.a]}»${q.f?". "+q.f:""}`;
+   setTimeout(()=>{draw();setTimeout(()=>foeTurn(mv.risk?2:1),700);},900);
+  }
+ }
+ function foeTurn(times=1){
+  const M=my[a],F=foe[f];
+  let total=0; for(let i=0;i<times;i++){total+=Math.round((F.atk+10+Math.random()*10)*mult(F,M));}
+  M.cur-=total; log+=`<br>${F.nm} атакует: −${total}${times>1?" (двойной удар!)":""}`;
+  draw(); $("#meS").classList.add("flash");
+  if(M.cur<=0){ setTimeout(myFaint,600); }
+ }
+ function foeFaint(){
+  log=`${foe[f].nm} побеждён!`;
+  if(foe.every(m=>m.cur<=0)){ return win(); }
+  f=foe.findIndex(m=>m.cur>0); log+=` ${trainer} выпускает ${foe[f].nm}.`; draw();
+ }
+ function myFaint(){
+  log=`${my[a].nm} больше не может сражаться.`;
+  if(my.every(m=>m.cur<=0)){ return lose(); }
+  const alive=my.map((m,i)=>m.cur>0?i:-1).filter(i=>i>=0);
+  main.innerHTML=`<div class="log">${log} Кого выпустить?</div><div class="team">${alive.map(i=>`<button class="tm" data-i="${i}">${art(my[i])}<small>${my[i].nm} ${my[i].cur}/${my[i].hp}</small></button>`).join("")}</div>`;
+  main.querySelectorAll(".tm").forEach(b=>b.onclick=()=>{a=+b.dataset.i;log=`Вперёд, ${my[a].nm}!`;draw();});
+ }
+ function win(){
+  done[key]=true; save();
+  main.innerHTML=`<div class="big">G‘alaba! 🏆</div><div class="card"><p>Ты победил соперника <b>${trainer}</b>. Урок ${THEMES[ti].lessons[li].n} отмечен пройденным. Команда отдыхает и полностью восстанавливается.</p><button class="btn wide" id="next">Дальше</button><button class="btn sec wide" id="again">Повторить бой</button></div>`;
+  $("#next").onclick=map; $("#again").onclick=()=>battle(ti,li);
+ }
+ function lose(){
+  main.innerHTML=`<div class="big">Mag‘lubiyat…</div><div class="card"><p>Вся команда устала. Загляни в слова и правило — и попробуй снова. Соперник тоже отдохнёт.</p><button class="btn wide" id="again">Подготовиться и повторить</button><button class="btn sec wide" id="home">На карту</button></div>`;
+  $("#again").onclick=()=>prep(ti,li); $("#home").onclick=map;
+ }
+ draw();
+}
+
+$("#back").onclick=()=>{ if(cur) map(); else map(); };
+load().then(()=>{ if(teamIds.length===6) map(); else pickTeam(); });
+</script></body></html>
